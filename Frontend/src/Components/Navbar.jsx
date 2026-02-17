@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/slices/userAuthSlice";
 
-const ADMIN_URL = "http://localhost:5174";
+const ADMIN_URL = import.meta.env.VITE_ADMIN_URL;
 
 const Navbar = () => {
   const navigate = useNavigate();
