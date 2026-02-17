@@ -22,6 +22,7 @@ const Navbar = () => {
     dispatch(logout());
     navigate("/");
     setOpenDropdown(false);
+    setShowMenu(false);
   };
 
   useEffect(() => {
@@ -67,16 +68,17 @@ const Navbar = () => {
 
           {/* Right Section */}
           <div className="flex items-center gap-3">
-            {/* Admin Panel Button (Desktop) */}
+            {/* Admin Panel - Desktop */}
             <button
               onClick={() => window.open(ADMIN_URL, "_blank")}
-              className="hidden md:flex px-5 py-2 rounded-full border border-blue-600 text-blue-600 text-sm font-medium hover:bg-blue-600 hover:text-white transition cursor-pointer"
+              className="hidden md:flex px-5 py-2 rounded-full border border-blue-600 text-blue-600 text-sm font-medium hover:bg-blue-600 hover:text-white transition"
             >
               Admin Panel
             </button>
 
+            {/* Desktop Auth */}
             {token ? (
-              <div className="relative" ref={dropdownRef}>
+              <div className="relative hidden md:block" ref={dropdownRef}>
                 <div
                   onClick={() => setOpenDropdown((p) => !p)}
                   className="flex items-center gap-2 cursor-pointer"
@@ -96,19 +98,13 @@ const Navbar = () => {
                 {openDropdown && (
                   <div className="absolute right-0 mt-3 w-52 bg-white rounded-xl shadow-lg border p-2">
                     <p
-                      onClick={() => {
-                        navigate("/my-profile");
-                        setOpenDropdown(false);
-                      }}
+                      onClick={() => navigate("/my-profile")}
                       className="px-4 py-2 rounded-lg hover:bg-gray-100 cursor-pointer text-sm"
                     >
                       My Profile
                     </p>
                     <p
-                      onClick={() => {
-                        navigate("/my-appointments");
-                        setOpenDropdown(false);
-                      }}
+                      onClick={() => navigate("/my-appointments")}
                       className="px-4 py-2 rounded-lg hover:bg-gray-100 cursor-pointer text-sm"
                     >
                       My Appointments
@@ -141,7 +137,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* ================= Mobile Menu ================= */}
       <div
         className={`fixed inset-0 bg-white z-50 transition-transform duration-300 ${
           showMenu ? "translate-x-0" : "translate-x-full"
@@ -156,7 +152,7 @@ const Navbar = () => {
           />
         </div>
 
-        <ul className="flex flex-col gap-4 px-6 py-8 text-lg font-medium text-gray-700">
+        <ul className="flex flex-col gap-5 px-6 py-8 text-lg font-medium text-gray-700">
           {["/", "/doctors", "/about", "/contact"].map((path, i) => (
             <NavLink
               key={i}
@@ -168,13 +164,36 @@ const Navbar = () => {
             </NavLink>
           ))}
 
+          {/* Create Account - Mobile */}
+          {!token && (
+            <button
+              onClick={() => {
+                navigate("/login");
+                setShowMenu(false);
+              }}
+              className="inline-flex mx-auto px-8 py-3 rounded-full bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
+            >
+              Create Account
+            </button>
+          )}
+
           {/* Admin Panel - Mobile */}
           <button
             onClick={() => window.open(ADMIN_URL, "_blank")}
-            className="mt-4 w-full py-3 rounded-xl border border-blue-600 text-blue-600 font-medium hover:bg-blue-600 hover:text-white transition cursor-pointer"
+            className="inline-flex mx-auto px-8 py-3 rounded-full border border-blue-600 text-blue-600 font-medium hover:bg-blue-600 hover:text-white transition"
           >
             Admin Panel
           </button>
+
+          {/* Logout - Mobile */}
+          {token && (
+            <button
+              onClick={handleLogout}
+              className="inline-flex mx-auto px-8 py-3 rounded-full bg-red-50 text-red-600 font-medium"
+            >
+              Logout
+            </button>
+          )}
         </ul>
       </div>
     </header>
